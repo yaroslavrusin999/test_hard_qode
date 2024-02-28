@@ -16,14 +16,6 @@ class Product(models.Model):
     max_students = models.PositiveSmallIntegerField()
     min_students = models.PositiveSmallIntegerField()
 
-    class Meta:
-        permissions = [
-            (
-                'product_access',
-                'Имеет ли студент доступ к продукту'
-            )
-        ]
-
 
 class Lesson(models.Model):
     product = models.ForeignKey(

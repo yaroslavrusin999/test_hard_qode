@@ -8,7 +8,9 @@ class Student(AbstractUser):
     study_group = models.ForeignKey(
         'StudyGroup',
         on_delete=models.CASCADE,
-        related_name='students')
+        related_name='students',
+        blank=True,
+        null=True)
 
 
 class StudyGroup(models.Model):
