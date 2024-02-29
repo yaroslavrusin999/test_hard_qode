@@ -1,4 +1,4 @@
-from django.db.models import Subquery, Count, Avg, Max
+from django.db.models import Subquery, Count
 from django.http import JsonResponse
 from rest_framework import generics
 
