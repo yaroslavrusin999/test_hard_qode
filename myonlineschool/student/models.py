@@ -17,3 +17,6 @@ class StudyGroup(models.Model):
         related_name='products')
     students = models.ManyToManyField('Student', related_name='study_groups')
     title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title

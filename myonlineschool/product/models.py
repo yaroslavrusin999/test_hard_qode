@@ -17,6 +17,9 @@ class Product(models.Model):
     max_students = models.PositiveSmallIntegerField()
     min_students = models.PositiveSmallIntegerField()
 
+    def __str__(self):
+        return self.title
+
 
 class Lesson(models.Model):
     """
@@ -30,3 +33,6 @@ class Lesson(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     link_to_video = models.URLField(max_length=200)
+
+    def __str__(self):
+        return self.title

@@ -9,15 +9,9 @@ class ProductAccessPermission(permissions.BasePermission):
     message = 'Access product not allowed'
 
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        else:
-            return False
-
-    def has_object_permission(self, request, view, obj):
-        product_id = (request.Student.study_groups.
+        product_id = (request.user.study_groups.
                       select_related('product').
-                      filter(product__id=obj.pk).
+                      filter(product__id=view.kwargs['product_id']).
                       values_list("product_id", flat=True))
         if product_id:
             return True
@@ -25,7 +19,9 @@ class ProductAccessPermission(permissions.BasePermission):
             return False
 
 
-class ReadOnlyProductPermission(permissions.BasePermission):
-    """Разрешение на просмотр доступных для покупки продуктов"""
+class ReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.method in permissions.SAFE_METHODS
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            return False

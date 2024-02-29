@@ -1,22 +1,44 @@
-from rest_framework import generics
 from django.db.models import Subquery, Count
+from rest_framework import generics
 
-from product.permissions import ReadOnlyProductPermission
-from product.models import Product
+from product.models import Product, Lesson
+from product.permissions import ReadOnly, ProductAccessPermission
+from product.serializers import ProductAccessPurchaseSerializer, LessonSerializer
 
 
 # Create your views here.
 
 
 class ProductListAccessPurchase(generics.ListAPIView):
-    permission_classes = [ReadOnlyProductPermission]
+    """
+    Класс представления для отображения
+    списка продуктов, доступных для покупки
+    """
+    permission_classes = [ReadOnly]
+    serializer_class = ProductAccessPurchaseSerializer
 
     def get_queryset(self):
         subquery = Subquery(self.request.
-                            Student.study_groups.
+                            user.study_groups.
                             select_related('product').
                             values_list("product_id", flat=True))
         products = (Product.objects.
                     exclude(id__in=subquery).
                     prefetch_related('lessons').
-                    annotate(count_lessons=Count('lesson_id')))
+                    annotate(count_lessons=Count('lessons')))
+        return products
+
+
+class LessonList(generics.ListAPIView):
+    """
+    Класс представления для отображения списка
+    уроков у конкретного продукта
+    """
+    permission_classes = [ReadOnly, ProductAccessPermission]
+    serializer_class = LessonSerializer
+
+    def get_queryset(self):
+        lessons = (Lesson.objects.
+                   select_related('product').
+                   filter(product__id=self.kwargs['product_id']))
+        return lessons
