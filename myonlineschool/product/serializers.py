@@ -12,7 +12,6 @@ class ProductAccessPurchaseSerializer(serializers.ModelSerializer):
 
 
 class LessonSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Lesson
         fields = ['title', 'description', 'link_to_video']

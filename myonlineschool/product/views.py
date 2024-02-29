@@ -1,9 +1,11 @@
 from django.db.models import Subquery, Count
+from django.http import JsonResponse
 from rest_framework import generics
 
 from product.models import Product, Lesson
 from product.permissions import ReadOnly, ProductAccessPermission
 from product.serializers import ProductAccessPurchaseSerializer, LessonSerializer
+from product.service import distribute_to_study_group
 
 
 # Create your views here.
@@ -42,3 +44,12 @@ class LessonList(generics.ListAPIView):
                    select_related('product').
                    filter(product__id=self.kwargs['product_id']))
         return lessons
+
+
+def buy_product(request, product_id):
+    """Функция бля обработке получения доступа к продукту"""
+    if request.method == 'GET':
+        st = request.user
+        pr = Product.objects.get(id=product_id)
+        is_successful = distribute_to_study_group(st, pr)
+        return JsonResponse({'is_successful': is_successful})

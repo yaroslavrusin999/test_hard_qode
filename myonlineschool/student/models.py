@@ -14,7 +14,7 @@ class StudyGroup(models.Model):
     product = models.ForeignKey(
         'product.Product',
         on_delete=models.CASCADE,
-        related_name='products')
+        related_name='study_groups')
     students = models.ManyToManyField('Student', related_name='study_groups')
     title = models.CharField(max_length=255)
 
