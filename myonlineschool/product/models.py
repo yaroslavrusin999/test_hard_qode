@@ -6,6 +6,7 @@ from .validators import validate_positiv_price
 # Create your models here.
 
 class Product(models.Model):
+    """Модель для продуктов"""
     author = models.CharField(max_length=50)
     title = models.CharField(max_length=255)
     start_date = models.DateTimeField()
@@ -18,6 +19,10 @@ class Product(models.Model):
 
 
 class Lesson(models.Model):
+    """
+    Модель для уроков, содержит
+    связь один ко многим с моделью продуктов
+    """
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,

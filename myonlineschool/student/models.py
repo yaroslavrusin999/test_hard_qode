@@ -5,17 +5,15 @@ from django.db import models
 # Create your models here.
 
 class Student(AbstractUser):
-    study_group = models.ForeignKey(
-        'StudyGroup',
-        on_delete=models.CASCADE,
-        related_name='students',
-        blank=True,
-        null=True)
+    """Переопределенная модель пользователя"""
+    pass
 
 
 class StudyGroup(models.Model):
+    """Модель для учебной группы"""
     product = models.ForeignKey(
         'product.Product',
         on_delete=models.CASCADE,
         related_name='products')
+    students = models.ManyToManyField('Student', related_name='study_groups')
     title = models.CharField(max_length=255)
